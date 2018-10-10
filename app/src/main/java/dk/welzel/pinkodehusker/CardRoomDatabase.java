@@ -42,9 +42,7 @@ public abstract class CardRoomDatabase extends RoomDatabase {
 
         private final CardDao mDao;
 
-        PopulateDbAsync(CardRoomDatabase db) {
-            mDao = db.cardDao();
-        }
+        PopulateDbAsync(CardRoomDatabase db) { mDao = db.cardDao(); }
 
         @Override
         protected Void doInBackground(Void... voids) {
