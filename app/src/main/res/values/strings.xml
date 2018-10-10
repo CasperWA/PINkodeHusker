@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PINkode Husker</string>
+    <string name="action_settings">Settings</string>
+    <string name="hint_card">Word&#8230;</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Card not saved because name is empty.</string>
+    <string name="no_card">No Cards</string>
+    <string name="card_icon_desc">Card</string>
+
+    <string name="title_activity_show__pin__card">Show PIN Card</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
