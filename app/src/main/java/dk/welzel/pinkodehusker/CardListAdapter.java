@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,11 +16,13 @@ import java.util.List;
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardViewHolder> {
 
     class CardViewHolder extends RecyclerView.ViewHolder {
-        private final TextView cardItemView;
+        private final TextView cardName;
+        private final TextView cardStatus;
 
         private CardViewHolder(View itemView) {
             super(itemView);
-            cardItemView = itemView.findViewById(R.id.textView);
+            cardName = itemView.findViewById(R.id.card_name);
+            cardStatus = itemView.findViewById(R.id.card_status);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -27,7 +31,38 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardVi
                     context.startActivity(intent);
                 }
             });
+
+            itemView.setOnCreateContextMenuListener(mOnCreateContextMenuListener);
         }
+
+        private final View.OnCreateContextMenuListener mOnCreateContextMenuListener = new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+                if (mCards != null) {
+                    MenuItem deleteItem = contextMenu.add("Delete");
+                    MenuItem designItem = contextMenu.add("Change card design");
+                    deleteItem.setOnMenuItemClickListener(mOnDeleteActionClickListener);
+                    designItem.setOnMenuItemClickListener(mOnDesignActionClickListener);
+                }
+            }
+        };
+
+        private final MenuItem.OnMenuItemClickListener mOnDeleteActionClickListener = new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                cardStatus.setText("Status: Deleted");
+
+                return false;
+            }
+        };
+
+        private final MenuItem.OnMenuItemClickListener mOnDesignActionClickListener = new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                cardStatus.setText("Status: Design changed");
+                return false;
+            }
+        };
     }
 
     private final LayoutInflater mInflater;
@@ -46,10 +81,12 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardVi
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         if (mCards != null) {
             PIN_Card current = mCards.get(position);
-            holder.cardItemView.setText(current.getName());
+            holder.cardName.setText(current.getName());
+            holder.cardStatus.setText(current.getStatus());
         } else {
             // Covers the case of data not being ready yet.
-            holder.cardItemView.setText(R.string.no_card);
+            holder.cardName.setText(R.string.no_card);
+            holder.cardStatus.setText(R.string.no_card);
         }
     }
 

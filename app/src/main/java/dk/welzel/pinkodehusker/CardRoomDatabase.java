@@ -4,11 +4,12 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-@Database(entities = {PIN_Card.class}, version = 1)
+@Database(entities = {PIN_Card.class}, version = 2)
 public abstract class CardRoomDatabase extends RoomDatabase {
 
     //DAO's associated with Room
@@ -23,7 +24,7 @@ public abstract class CardRoomDatabase extends RoomDatabase {
                     // Create database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             CardRoomDatabase.class, "card_database")
-                            .addCallback(sRoomDatabaseCallback).build();
+                            .addCallback(sRoomDatabaseCallback).fallbackToDestructiveMigration()    .build();
                 }
             }
         }
@@ -51,12 +52,12 @@ public abstract class CardRoomDatabase extends RoomDatabase {
             mDao.deleteAll();
 
             PIN_Card visa = new PIN_Card();
-            visa.id = 1;
             visa.cardName = "VISA";
+            visa.cardStatus = "Status: Populated";
 
             PIN_Card mc = new PIN_Card();
-            mc.id = 2;
             mc.cardName = "MasterCard";
+            mc.cardStatus = "Status: Populated";
 
             mDao.insert(visa);
             mDao.insert(mc);
@@ -64,4 +65,6 @@ public abstract class CardRoomDatabase extends RoomDatabase {
             return null;
         }
     }
+
+
 }

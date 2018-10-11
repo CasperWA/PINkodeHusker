@@ -18,7 +18,7 @@ public interface CardDao {
     @Query("SELECT * FROM pin_card_table WHERE id = :id")
     PIN_Card loadCardById(int id);
 
-    @Query("SELECT * FROM pin_card_table ORDER BY card_name ASC")
+    @Query("SELECT * FROM pin_card_table ORDER BY id ASC")
     LiveData<List<PIN_Card>> getAllCards();
 
     @Insert(onConflict = IGNORE)
